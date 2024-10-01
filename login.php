@@ -19,8 +19,14 @@ if(isset($_SESSION['id'])){
     <div class="container-lg">
     <h1 style="text-align: center;" class="mt-3">Webboard Joe</h1>
     <?php include "nav.php";?>
-    <div class="row">
+    <div class="row mt-4">
         <div class="col-sm-8 col-md-6 col-lg-4 mx-auto">
+            <?php
+                if(isset($_SESSION['error'])){
+                    echo "<div class= 'alert alert-danger'>ชื่อบัญชีหรือรหัสผ่านไม่ถูกต้อง</div>";
+                    unset($_SESSION['error']);
+                }
+            ?>
     <div class="card mt-4">
         <h5 class="card-header">เข้าสู่ระบบ</h5>
          <div class="card-body">

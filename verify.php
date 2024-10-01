@@ -13,32 +13,38 @@ if(isset($_SESSION['id'])){
     <title>Verify</title>
 </head>
 <body>
-    <h1 style="text-align: center;">Webboard Joe</h1>
+    <!--<h1 style="text-align: center;">Webboard Joe</h1>
     <hr>
-    <div style="text-align: center;">
+    <div style="text-align: center;">-->
     <?php
      $login = $_POST["login"];
      $pwd = $_POST["pwd"];
-
      if ($_POST["login"] == 'admin' && $_POST["pwd"] == 'ad1234'){
         $_SESSION['username']="admin";
         $_SESSION['role']="a";
         $_SESSION['id']=session_id();
-        echo "ยินดีต้อนรับสู่ admin";
+        header("location:index.php");
+        die();
+        //echo "ยินดีต้อนรับสู่ admin";
      }
      else if ($_POST["login"] == 'member' && $_POST["pwd"] == 'mem1234'){
              $_SESSION['username']="member";
              $_SESSION['role']="m";
              $_SESSION['id']=session_id();
-            echo "ยินดีต้อนรับสู่ member";
+             header("location:index.php");
+             die();
+            //echo "ยินดีต้อนรับสู่ member";
      }         
      else{
-       echo "ชื่อบัญชีหรือรหัสผ่านไม่ถูกต้อง";
+         $_SESSION['error']='error';
+         header("location:login.php");
+         die();
+       //echo "ชื่อบัญชีหรือรหัสผ่านไม่ถูกต้อง";
      }  
     ?>
-    </div> 
+    <!--</div> 
     <div style="text-align: center;">
     <a href="index.php">กลับไปหน้าหลัก</a>
-    </div>
+    </div>-->
 </body>
 </html>
