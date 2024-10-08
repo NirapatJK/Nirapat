@@ -19,7 +19,25 @@ if(isset($_SESSION['id'])){
     <?php
      $login = $_POST["login"];
      $pwd = $_POST["pwd"];
-     if ($_POST["login"] == 'admin' && $_POST["pwd"] == 'ad1234'){
+     $conn = new PDO("mysql:host=localhost;dbname=webboard;charset=utf8", "root", "");
+     $sql="SELECT * FROM user where login= '$login' and password=sha1('$pwd')";
+     $result=$conn->query($sql);
+     if($result->rowCount()==1){
+      $data=$result->fetch(PDO::FETCH_ASSOC);
+      $_SESSION['username']=$data['login'];
+      $_SESSION['role']=$data['role'];
+      $_SESSION['user_id']=$data['id'];
+      $_SESSION['id']=session_id();
+      header("location:index.php");
+      die();
+     }else{
+      $_SESSION['error']="error";
+      header("location:index.php");
+      die(); 
+     }
+     $conn = null;
+     ?>
+    <!--if ($_POST["login"] == 'admin' && $_POST["pwd"] == 'ad1234'){
         $_SESSION['username']="admin";
         $_SESSION['role']="a";
         $_SESSION['id']=session_id();
@@ -42,7 +60,7 @@ if(isset($_SESSION['id'])){
        //echo "ชื่อบัญชีหรือรหัสผ่านไม่ถูกต้อง";
      }  
     ?>
-    <!--</div> 
+    </div> 
     <div style="text-align: center;">
     <a href="index.php">กลับไปหน้าหลัก</a>
     </div>-->

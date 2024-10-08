@@ -19,11 +19,24 @@ if(isset($_SESSION['id'])){
     <div class="container-lg">
     <h1 style="text-align: center;" class="mt-3">Webboard Joe</h1>
     <?php include "nav.php";?>
+    <div class="row">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6">
+            <?php
+                if(isset( $_SESSION['add_login'])){
+                    if($_SESSION['add_login']=="error"){
+                        echo "<div class= 'alert alert-danger'>ชื่อบัญชีซ้ำหรือฐานข้อมูลมีปัญหา</div>";
+                    }else{
+                        echo "<div class= 'alert alert-success'>เพิ่มบัญชีเรียบร้อยแล้ว</div>"; 
+                    }
+                    unset($_SESSION['add_login']);
+                } 
+            ?>
       <div class="row mt-4">
          <div class="col-sm-10 col-md-8 col-lg-6 mx-auto">
            <div class="card border-primary ">
               <form action="register_save.php" method="post">
-              <h5 class="card-header bg-primary text-white">สมัครสมาชิก</h5>
+              <h5 class="card-header bg-primary text-white">เข้าสู่ระบบ</h5>
               <div class="card-body">
                 <div class="row mb-3">
                     <label class="col-lg-3 col-form-label" for="login">ชื่อบัญชี :</label>
@@ -77,10 +90,11 @@ if(isset($_SESSION['id'])){
               </form>
            </div>
          </div>
+        </div>
+      </div>
+      </div>
       </div>
     </div>
-
-
     <!--<h1 style="text-align: center;">สมัครสมาชิก</h1>
     <hr>
     <table style="border: 2px solid black; width: 40%;" align="center">
