@@ -32,12 +32,12 @@ if(isset($_SESSION['id'])){
                     unset($_SESSION['add_login']);
                 } 
             ?>
-      <div class="row mt-4">
-         <div class="col-sm-10 col-md-8 col-lg-6 mx-auto">
-           <div class="card border-primary ">
-              <form action="register_save.php" method="post">
+            <!--<div class="row mt-4">-->
+            <!--<div class="col-sm-10 col-md-8 col-lg-6 mx-auto">-->
+            <div class="card border-primary mt-4">      
               <h5 class="card-header bg-primary text-white">เข้าสู่ระบบ</h5>
-              <div class="card-body">
+              <div class="card-body"> 
+              <form action="register_save.php" method="post">
                 <div class="row mb-3">
                     <label class="col-lg-3 col-form-label" for="login">ชื่อบัญชี :</label>
                     <div class="col-lg-9">
@@ -86,14 +86,14 @@ if(isset($_SESSION['id'])){
                         </button>
                     </div>   
                 </div>
-              </div>
+               </div>
               </form>
            </div>
-         </div>
+           </div>
+           <!--</div>-->
+           <!--</div>-->
+          </div>
         </div>
-      </div>
-      </div>
-      </div>
     </div>
     <!--<h1 style="text-align: center;">สมัครสมาชิก</h1>
     <hr>
