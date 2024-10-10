@@ -92,10 +92,13 @@ if(isset($_SESSION['id'])){
            </div>
            <!--</div>-->
            <!--</div>-->
-          </div>
+           </div>
         </div>
     </div>
-    <!--<h1 style="text-align: center;">สมัครสมาชิก</h1>
+</body>
+</html>
+
+<!--<h1 style="text-align: center;">สมัครสมาชิก</h1>
     <hr>
     <table style="border: 2px solid black; width: 40%;" align="center">
         <tr><td colspan="2" style="background-color: #6CD2FE;">กรอกข้อมูล</td></tr>
@@ -118,5 +121,3 @@ if(isset($_SESSION['id'])){
     <div style="text-align: center;">
          <a href="index.php">กลับไปหน้าหลัก</a>
     </div>-->
-</body>
-</html>
