@@ -47,7 +47,9 @@ session_start();
             echo "<i class='bi bi-plus'></i>สร้างกระทู้ใหม่</a>";
          }
        ?>
+    </div>
 
+    <table class="table table-striped mt-4">
         <?php
         $conn = new PDO("mysql:host=localhost;dbname=webboard;charset=utf8", "root", "");
         $sql = "SELECT t3.name,t1.title,t1.id,t2.login,t1.post_date FROM post as t1
@@ -60,45 +62,14 @@ session_start();
             style=text-decoration:none>$row[1]</a><br>$row[3] - $row[4]</div>";
             if(isset($_SESSION['id']) && $_SESSION['role']=='a'){
                 echo "<div class='me-2 align-self-center'><a href=delete.php?id=$row[2]
-                class='btn btn-danger btn-sm' onclick='return myFunction()'></div>";
-             
+                class='btn btn-danger btn-sm' onclick='return myFunction()'>
+                <i class='bi bi-trash'></i></a></div>";     
              }
             echo "</td></tr>";
         }
         $conn = null;
         ?>
-    </div>
-
-    <table class="table table-striped mt-4">
-        <?php
-        $conn = new PDO("mysql:host=localhost;dbname=webboard;charset=utf8", "root", "");
-        $sql="SELECT t3.name,t1.title,t1.id,t2.login,t1.post_date FROM post as t1
-        INNER JOIN user as t2 ON (t1.user_id=t2.id)
-        INNER JOIN category as t3 ON (t1.cat_id=t3.id) ORDER BY t1.post_date DESC";
-        $result=$conn->query($sql);
-        while($row = $result->fetch()){
-         echo "<tr><td>[ $row[0] ] <a href=post.php?id=$row[2]
-         style = text-decoration:none>$row[1]</a><br>$row[3] - $row[4]</td></tr>";
-        }
-        $conn = null;
-        ?>
-    </table>
-           <!--for($i=1;$i<=10;$i=$i+1)
-           {
-            echo"<tr><td><a href=post.php?id=$i style='text-decoration:none'>กระทู้ที่ $i</a>";
-            if(isset($_SESSION['id']) && $_SESSION['role']=='a'){
-                echo "&nbsp;&nbsp;<a href=delete.php?id=$i 
-                class='btn btn-danger btn-sm me-3' style='float: right'>
-                <i class='bi bi-trash'></i></a>";
-            }
-            echo "</td></tr>";
-           }-->
-
-    <!--<select name="category">
-        <option value="all">--ทั้งหมด--</option>
-        <option value="general">เรื่องทั่วไป</option>
-        <option value="study">เรื่องเรียน</option>
-    </select>-->
+    </table>      
     </div>
 </body>
 </html>

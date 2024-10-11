@@ -47,7 +47,7 @@
     $conn = null;
     ?>
 
-    <div class="card text-dark bg-white border-success mt-4">      
+    <div class="card text-dark bg-white border-success mt-4 mb-4">      
     <div class="card-header bg-success text-white">แสดงความคิดเห็น</div>
     <div class="card-body"> 
         <form action="post_save.php" method="post">
