@@ -14,6 +14,23 @@ if(isset($_SESSION['id'])){
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script>
+        function password_show_hide(){
+            let pwd = document.getElementById("pwd");
+            let show_eye = document.getElementById("show_eye");
+            let hide_eye = document.getElementById("hide_eye");
+            hide_eye.classList.remove('d-none');
+            if(pwd.type == 'password'){
+                pwd.type='text';
+                show_eye.style.display="none";
+                hide_eye.style.display="block";
+            }else{
+                pwd.type='password';
+                show_eye.style.display="block";
+                hide_eye.style.display="none";
+            }
+        }
+    </script>
 </head>
 <body>
     <div class="container-lg">
@@ -37,7 +54,13 @@ if(isset($_SESSION['id'])){
                 </div>
                 <div class="form-group mt-3">
                     <label for="pwd" class="form-label">Password:</label>
-                    <input id="pwd" type="password" class="form-control" name="pwd">
+                    <div class="input-group">
+                        <input id="pwd" type="password" class="form-control" name="pwd">
+                        <span class="input-group-text" onclick="password_show_hide()">
+                            <i class="b1 bi-eye-fill" id="show_eye"></i>
+                            <i class="b1 bi-eye-slash-fill d-none" id="hide_eye"></i>
+                        </span>
+                    </div>
                 </div>
                 <div class="mt-3 d-flex justify-content-center">
                     <button type="submit" class="btn btn-success btn-sm me-2">Login</button>
