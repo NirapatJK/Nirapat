@@ -1,9 +1,7 @@
 <?php
 session_start();
-// ตรวจสอบสิทธิ์ผู้ใช้
-if (!isset($_SESSION['role']) || $_SESSION['role'] === 'b') {
-    // แสดงข้อความหรือทำอย่างอื่นถ้าถูกแบน
-    echo "<p>คุณไม่สามารถแสดงความคิดเห็นได้เนื่องจากถูกแบน</p>";
+if (!isset($_SESSION['role'])) {
+    header("location:index.php");
 }
 ?>
 
@@ -25,7 +23,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] === 'b') {
     <?php include "nav.php";?>
     <br>
     <?php
-    session_start();
+
     $conn = new PDO("mysql:host=localhost;dbname=webboard;charset=utf8","root","");
     $sql = "select post.title,post.content,user.login,post.post_date
     from post inner join user on (post.user_id=user.id) where post.id=$_GET[id]";
@@ -56,27 +54,31 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] === 'b') {
     $conn = null;
     ?>
 
-    <div class="card text-dark bg-white border-success mt-4 mb-4">      
-    <div class="card-header bg-success text-white">แสดงความคิดเห็น</div>
-    <div class="card-body"> 
-        <form action="post_save.php" method="post">
-        <input type="hidden" name="post_id" value="<?= $_GET['id']; ?>">
-            <div class="row mb-3 justify-content-center">
-                <div class="col-lg-10">
-                    <textarea name="comment" class="form-control" rows="8"></textarea>
+    <?php
+    if($_SESSION["role"] != "b"){
+        echo "<div class='card text-dark bg-white border-success mt-4 mb-4'>      
+        <div class='card-header bg-success text-white'>แสดงความคิดเห็น</div>
+        <div class='card-body'> 
+            <form action='post_save.php' method='post'>
+            <input type='hidden' name='post_id' value=' $_GET[id]'>
+                <div class='row mb-3 justify-content-center'>
+                    <div class='col-lg-10'>
+                        <textarea name='comment' class='form-control' rows='8'></textarea>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <center>
-                        <button type="submit" class="btn btn-success btn-sm text-white">
-                        <i class="bi bi-box-arrow-up-right me-1"></i>ส่งข้อความ</button>
-                    </center>
+                <div class='row'>
+                    <div class='col-lg-12'>
+                        <center>
+                            <button type='submit' class='btn btn-success btn-sm text-white'>
+                            <i class='bi bi-box-arrow-up-right me-1'></i>ส่งข้อความ</button>
+                        </center>
+                    </div>
                 </div>
-            </div>
-        </form>
-    </div>
-    </div>
+            </form>
+        </div>
+        </div>";
+    }
+    ?>
     </div>
     </div>
     </div>

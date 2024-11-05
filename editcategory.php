@@ -1,23 +1,21 @@
 <?php
-session_start();
-$conn = new PDO("mysql:host=localhost;dbname=webboard;charset=utf8", "root", "");
+    session_start();
+    $id = $_POST['cat_id'];
+    $category = $_POST['category'];
 
-// ตรวจสอบว่ามี ID ของหมวดหมู่หรือไม่
-if (!isset($_POST['id'])) {
-    header("Location: category.php");
-    exit();
-}
+    $conn = new PDO("mysql:host=localhost;dbname=webboard;charset=utf8","root","");
 
-$id = $_POST['id'];
-$categoryName = $_POST['categoryName'];
+    $sql = "SELECT name From category WHERE name = '$category'";
+    $count = $conn->query($sql)->fetchColumn();
+    if ($count == 0){
+        $sql = "UPDATE category Set name='$category' Where id='$id'";
+        $conn->exec($sql);
+        $_SESSION['cat_edit_save'] = 'done';
+    }
+    else{
+        $_SESSION['cat_edit_save'] = 'undone';
+    }
 
-// อัปเดตข้อมูลหมวดหมู่
-$sql = "UPDATE category SET name = :name WHERE id = :id";
-$stmt = $conn->prepare($sql);
-$stmt->bindParam(':name', $categoryName);
-$stmt->bindParam(':id', $id);
-$stmt->execute();
-
-// ส่งกลับไปยังหน้า category.php พร้อมกับข้อความแจ้งเตือน
-header("Location: category.php?message=แก้ไขหมวดหมู่เรียบร้อยแล้ว");
+    $conn = null;
+    header("location: category.php");
 ?>

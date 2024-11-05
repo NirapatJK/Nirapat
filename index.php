@@ -1,92 +1,102 @@
 <?php
 session_start();
-$selected_category = isset($_GET['category']) ? $_GET['category'] : '';
+if (!isset($_COOKIE['catagory'])){
+    $_COOKIE['catagory'] = "ทั้งหมด";
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webboard</title>
+    <title>Index</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <script>
-        function myFunction(){
-            return confirm("ต้องการจะลบจริงหรือไม่");
-        }
-    </script>
 </head>
+
 <body>
-    <div class="container-lg">
-        <h1 style="text-align: center;" class="mt-3">Webboard Joe</h1>
-        <?php include "nav.php"; ?>
-        <div class="mt-3">
-            <label>หมวดหมู่:</label>
-            <span class="dropdown">
-                <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <?php echo $selected_category ? htmlspecialchars($selected_category) : '--ทั้งหมด--'; ?>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="?category=">ทั้งหมด</a></li>
-                    <?php
-                    $conn = new PDO("mysql:host=localhost;dbname=webboard;charset=utf8", "root", "");
-                    $sql = "SELECT * FROM category";
-                    foreach ($conn->query($sql) as $row) {
-                        echo "<li><a class='dropdown-item' href='?category=" . urlencode($row['name']) . "'>" . htmlspecialchars($row['name']) . "</a></li>";
+    <center>
+        <h1>Webboard Joe</h1>
+    </center>
+    <?php
+            include "nav.php"
+    ?>
+    <div class="container mt-4 ms-auto me-auto">
+        <span class="dropdown">
+            หมวดหมู่ :
+            <button id="catSelect" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <?php
+                    echo $_COOKIE['catagory'];
+                ?>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="Button2">
+                <li><a onclick="selectCategory('ทั้งหมด')" class="dropdown-item">--ทั้งหมด--</a></li>
+                <?php
+                    $conn=new PDO("mysql:host=localhost;dbname=webboard;charset=utf8","root", "");
+                    $sql="SELECT name From category";
+                    foreach($conn->query($sql) as $row){
+                        echo "<li><a onclick='selectCategory(\"$row[0]\")' class='dropdown-item'>$row[0]</a></li>";
                     }
-                    $conn = null;
-                    ?>
-                </ul>
-            </span>
-
+                    $conn=null;
+                ?>
+            </ul>
+        </span>
+        <?php
+            if (isset($_SESSION['id']) && $_SESSION['role'] !='b') {
+                echo "<a class='btn btn-success btn-sm' style ='float: right' role='button' href='newpost.php'>สร้างกระทู้ใหม่</a>";
+            }
+        ?>
+        <br>
+        <br>
+        <table class="table table-striped">
             <?php
-            if (isset($_SESSION['role']) && $_SESSION['role'] !== 'b') {
-                echo "<a href='newpost.php' class='btn btn-success btn-sm' style='float: right;'>";
-                echo "<i class='bi bi-plus'></i>สร้างกระทู้ใหม่</a>";
-            } else {
-            echo "<p>คุณไม่สามารถสร้างกระทู้ใหม่ได้เนื่องจากถูกแบน</p>";
-            }
-            ?>
-
-            <?php
-            if (isset($_SESSION['id'])) {
-                echo "<a href='newpost.php' class='btn btn-success btn-sm' style='float: right;'>";
-                echo "<i class='bi bi-plus'></i>สร้างกระทู้ใหม่</a>";
-            }
-            ?>
-            
-        </div>
-        <table class="table table-striped mt-4">
-            <?php
-            $conn = new PDO("mysql:host=localhost;dbname=webboard;charset=utf8", "root", "");
-            $sql = "SELECT t3.name, t1.title, t1.id, t2.login, t1.post_date FROM post AS t1
-            INNER JOIN user AS t2 ON (t1.user_id = t2.id) 
-            INNER JOIN category AS t3 ON (t1.cat_id = t3.id)";
-            
-            if ($selected_category) {
-                $sql .= " WHERE t3.name = :category";
-            }
-            $sql .= " ORDER BY t1.post_date DESC";
-            $stmt = $conn->prepare($sql);
-            if ($selected_category) {
-                $stmt->bindParam(':category', $selected_category);
-            }
-            $stmt->execute();
-
-            while ($row = $stmt->fetch()) {
-                echo "<tr><td class='d-flex justify-content-between'>
-                <div>[ $row[0] ] <a href='post.php?id=$row[2]' style='text-decoration:none'>$row[1]</a><br>$row[3] - $row[4]</div>";
-                if (isset($_SESSION['id']) && $_SESSION['role'] == 'a') {
-                    echo "<div class='me-2 align-self-center'><a href='delete.php?id=$row[2]' class='btn btn-danger btn-sm' onclick='return myFunction()'>
-                    <i class='bi bi-trash'></i></a></div>";     
+                $conn=new PDO("mysql:host=localhost;dbname=webboard;charset=utf8","root", "");
+                $sql="SELECT t3.name,t1.title,t1.id,t2.login,t1.post_date,t2.role From post as t1 
+                    Inner Join user as t2 ON (t1.user_id=t2.id) 
+                    Inner Join category as t3 ON (t1.cat_id=t3.id) ORDER BY t1.post_date DESC";
+                $result=$conn->query($sql);
+                while($row = $result->fetch()){
+                    if ($_COOKIE['catagory'] != "ทั้งหมด" && $row[0] != $_COOKIE['catagory'] || $row[5] == 'b'){
+                        continue;
+                    }
+                    echo "<tr><td>[ $row[0] ] <a href='post.php?id=$row[2]' style='text-decoration:none'>$row[1]</a><div style ='float: right'>";
+                    if(isset($_SESSION['id']) && $_SESSION['username'] == $row[3]){
+                        echo "<a onclick='goeditpost($row[2])' class='btn btn-warning' role='button'><i class='bi bi-pencil-fill'></i></a> ";
+                    }
+                    if(isset($_SESSION['id']) && $_SESSION['role']=='m' && $_SESSION['username'] == $row[3]){
+                        echo "<a onclick='confirmdelete($row[2])' class='btn btn-danger' role='button'><i class='bi bi-trash'></i></a>";
+                    }
+                    else if(isset($_SESSION['id']) && $_SESSION['role']=='a'){
+                        echo "<a onclick='confirmdelete($row[2])' class='btn btn-danger' role='button'><i class='bi bi-trash'></i></a>";
+                    }
+                    echo "</div><br>$row[3] - $row[4]</td></tr>";
                 }
-                echo "</td></tr>";
-            }
-            $conn = null;
+                $conn=null;
             ?>
-        </table>      
+        </table>
+        <script>
+            function confirmdelete(a) {
+                if (confirm("ต้องการจะลบจริงหรือไม่") == true) {
+                    location.href = `delete.php?id=${a}`;
+                } else {
+                    text = "You canceled!";
+                }
+            };
+
+            function goeditpost(a) {
+                location.href = `editpost.php?id=${a}`;
+            };
+
+            function selectCategory(a){
+                let catsel = document.getElementById("catSelect");
+                document.cookie = "catagory=" + a + ";path=/"
+                catsel.textContent = a;
+                location.reload();
+            };
+        </script>
     </div>
 </body>
+
 </html>

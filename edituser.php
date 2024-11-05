@@ -1,21 +1,17 @@
 <?php
-session_start();
-$conn = new PDO("mysql:host=localhost;dbname=webboard;charset=utf8", "root", "");
-
-// ตรวจสอบการส่งข้อมูล
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $id = $_POST['id'];
-    $firstname = $_POST['firstname'];
-    $lastname = $_POST['lastname'];
+    session_start();
+    $id = $_POST['ID'];
+    $name = $_POST['name'];
     $gender = $_POST['gender'];
-    $email = $_POST['email'];
-    $role = $_POST['role'] === 'b' ? 'b' : 'u'; // บังคับให้เพิ่มสิทธิ์เป็น 'b' ถ้าถูกแบน
+    $mail = $_POST['email'];
+    $role = $_POST['role'];
 
-    $sql = "UPDATE user SET firstname = ?, lastname = ?, gender = ?, email = ?, role = ? WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([$firstname, $lastname, $gender, $email, $role, $id]);
+    $conn = new PDO("mysql:host=localhost;dbname=webboard;charset=utf8","root","");
 
-    header("Location: user.php?message=แก้ไขข้อมูลผู้ใช้งานเรียบร้อยแล้ว");
-    exit();
-}
+    $sql = "UPDATE user Set name='$name',gender='$gender',email='$mail',role='$role' Where id='$id'";
+
+    $conn->exec($sql);
+    $conn = null;
+    $_SESSION['user_edit_save'] = 'done';
+    header("location: user.php");
 ?>

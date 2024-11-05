@@ -1,18 +1,13 @@
 <?php
-session_start();
-$conn = new PDO("mysql:host=localhost;dbname=webboard;charset=utf8", "root", "");
+    session_start();
+    $category = $_GET['cat_name'];
 
-// ตรวจสอบว่ามี ID ของหมวดหมู่หรือไม่
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+    $conn = new PDO("mysql:host=localhost;dbname=webboard;charset=utf8","root","");
 
-    // ลบหมวดหมู่
-    $sql = "DELETE FROM category WHERE id = :id";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':id', $id);
-    $stmt->execute();
+    $sql = "DELETE From category Where name='$category'";
 
-    // ส่งกลับไปยังหน้า category.php พร้อมกับข้อความแจ้งเตือน
-    header("Location: category.php?message=ลบหมวดหมู่เรียบร้อยแล้ว");
-}
+    $conn->exec($sql);
+    $conn = null;
+    $_SESSION['cat_delete_save'] = 'done';
+    header("location: category.php");
 ?>
